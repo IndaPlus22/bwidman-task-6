@@ -1,6 +1,6 @@
-import Data.Char
-
 module F1 where
+
+import Data.Char
 
 main :: IO ()
 main = putStrLn (show (fib 42))
@@ -17,22 +17,36 @@ konsonant c = not (elem c ['a', 'e', 'i', 'o', 'u', 'y'])
 
 rovarsprak :: String -> String
 rovarsprak [] = []
-rovarsprak (head:tail) =
-    if konsonant head
-    then [head, 'o', head] ++ rovarsprak tail
-    else [head] ++ rovarsprak tail
+rovarsprak (x:xs) =
+    if konsonant x
+    then [x, 'o', x] ++ rovarsprak xs
+    else [x] ++ rovarsprak xs
 
 karpsravor :: String -> String
 karpsravor [] = []
-karpsravor s@(head:tail) =
-    if konsonant head
-    then [head] ++ karpsravor (drop 3 s)
-    else [head] ++ karpsravor tail
+karpsravor s@(x:xs) =
+    if konsonant x
+    then [x] ++ karpsravor (drop 3 s)
+    else [x] ++ karpsravor xs
 
 -- Medellängd
+antalBokstaver :: String -> Double
+antalBokstaver [] = 0.0
+antalBokstaver (x:xs) =
+    if isAlpha x
+    then 1.0 + antalBokstaver xs
+    else antalBokstaver xs
+
+antalOrd :: String -> Double
+antalOrd [] = 0.0
+antalOrd (x:xs) =
+    if isAlpha x && (null xs || not (isAlpha (head xs)))
+    then 1.0 + antalOrd xs
+    else antalOrd xs
+
 medellangd :: String -> Double
 medellangd [] = 0.0
-medellangd s = 1.0
+medellangd s = antalBokstaver s / antalOrd s
 
 -- Listskyffling
 
