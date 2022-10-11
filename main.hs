@@ -3,13 +3,14 @@ module F1 where
 import Data.Char
 
 main :: IO ()
-main = putStrLn (show (fib 42))
+main = putStrLn (show (fib 40))
 
 -- Fibonacci-talen
 fib :: Int -> Int
 fib 0 = 0
 fib 1 = 1
-fib n = fib (n - 1) + fib (n - 2)
+fib 2 = 1
+fib n = 2 * fib (n - 2) + fib (n - 3)
 
 -- Rövarspråket
 konsonant :: Char -> Bool
@@ -20,14 +21,14 @@ rovarsprak [] = []
 rovarsprak (x:xs) =
     if konsonant x
     then [x, 'o', x] ++ rovarsprak xs
-    else [x] ++ rovarsprak xs
+    else x:rovarsprak xs
 
 karpsravor :: String -> String
 karpsravor [] = []
 karpsravor s@(x:xs) =
     if konsonant x
-    then [x] ++ karpsravor (drop 3 s)
-    else [x] ++ karpsravor xs
+    then x:karpsravor (drop 3 s)
+    else x:karpsravor xs
 
 -- Medellängd
 antalBokstaver :: String -> Double
@@ -49,5 +50,11 @@ medellangd [] = 0.0
 medellangd s = antalBokstaver s / antalOrd s
 
 -- Listskyffling
+varannan :: [x] -> [x]
+varannan [] = []
+varannan [x] = [x]
+varannan (x:xs) = x:varannan (tail xs)
 
-skyffla s = s
+skyffla :: [x] -> [x]
+skyffla [] = []
+skyffla list@(x:xs) = varannan list ++ skyffla (varannan xs)
